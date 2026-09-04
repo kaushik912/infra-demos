@@ -1,0 +1,34 @@
+# Evolving an existing table. The first changeset carries a PRECONDITION:
+# only add the column if it doesn't already exist. onFail=MARK_RAN means
+# "if the precondition fails, quietly record this changeset as run and skip
+# it" — handy when adopting Liquibase on a DB that already had the column.
+databaseChangeLog:
+  - changeSet:
+      id: v3-add-author-email
+      author: demo
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: author
+                columnName: email
+      changes:
+        - addColumn:
+            tableName: author
+            columns:
+              - column:
+                  name: email
+                  type: VARCHAR(320)
+      rollback:
+        - dropColumn:
+            tableName: author
+            columnName: email
+
+  - changeSet:
+      id: v3-unique-author-email
+      author: demo
+      changes:
+        - addUniqueConstraint:
+            tableName: author
+            columnNames: email
+            constraintName: uq_author_email

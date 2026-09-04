@@ -1,0 +1,30 @@
+# A "changeSet" is Liquibase's unit of change. It is identified by the pair
+# (id, author) and, once applied, is recorded in the DATABASECHANGELOG table
+# with a checksum. A changeset is applied AT MOST ONCE and is never re-run
+# (unless you mark it runOnChange/runAlways).
+databaseChangeLog:
+  - changeSet:
+      id: v1-create-author
+      author: demo
+      comment: Create the author table
+      changes:
+        - createTable:
+            tableName: author
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+      # Liquibase can auto-generate a rollback for createTable, but showing it
+      # explicitly makes `liquibase rollback` behaviour obvious.
+      rollback:
+        - dropTable:
+            tableName: author

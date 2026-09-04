@@ -1,0 +1,24 @@
+# runOnChange:true is Liquibase's answer to Flyway's REPEATABLE migrations.
+# Normally a changeset runs once; with runOnChange, Liquibase re-applies it
+# whenever its checksum changes. Combined with replaceIfExists this is the
+# clean way to manage redefinable objects (views, procedures, functions):
+# just edit the SELECT below and restart — Liquibase re-creates the view.
+databaseChangeLog:
+  - changeSet:
+      id: v5-book-catalog-view
+      author: demo
+      runOnChange: true
+      changes:
+        - createView:
+            viewName: book_catalog
+            replaceIfExists: true
+            selectQuery: |
+              SELECT b.id             AS book_id,
+                     b.title          AS title,
+                     b.published_year AS published_year,
+                     a.name           AS author_name
+              FROM book b
+              JOIN author a ON a.id = b.author_id
+      rollback:
+        - dropView:
+            viewName: book_catalog

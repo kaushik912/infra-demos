@@ -1,0 +1,63 @@
+# Seed data guarded by a CONTEXT. These changesets only run when the active
+# Liquibase contexts include "dev" (see spring.liquibase.contexts). Point the
+# same app at prod with contexts=prod and this data simply won't be inserted.
+databaseChangeLog:
+  - changeSet:
+      id: v4-seed-authors
+      author: demo
+      context: dev
+      changes:
+        - insert:
+            tableName: author
+            columns:
+              - column: {name: id, valueNumeric: 1}
+              - column: {name: name, value: "Ursula K. Le Guin"}
+              - column: {name: email, value: "ursula@example.com"}
+        - insert:
+            tableName: author
+            columns:
+              - column: {name: id, valueNumeric: 2}
+              - column: {name: name, value: "Terry Pratchett"}
+              - column: {name: email, value: "terry@example.com"}
+        # Same identity gotcha as the Flyway demo: explicit ids don't advance
+        # the auto-increment counter, so restart it past the seeded rows.
+        - sql:
+            sql: ALTER TABLE author ALTER COLUMN id RESTART WITH 3
+      rollback:
+        - delete:
+            tableName: author
+            where: id IN (1, 2)
+
+  - changeSet:
+      id: v4-seed-books
+      author: demo
+      context: dev
+      changes:
+        - insert:
+            tableName: book
+            columns:
+              - column: {name: title, value: "A Wizard of Earthsea"}
+              - column: {name: published_year, valueNumeric: 1968}
+              - column: {name: author_id, valueNumeric: 1}
+        - insert:
+            tableName: book
+            columns:
+              - column: {name: title, value: "The Left Hand of Darkness"}
+              - column: {name: published_year, valueNumeric: 1969}
+              - column: {name: author_id, valueNumeric: 1}
+        - insert:
+            tableName: book
+            columns:
+              - column: {name: title, value: "The Colour of Magic"}
+              - column: {name: published_year, valueNumeric: 1983}
+              - column: {name: author_id, valueNumeric: 2}
+        - insert:
+            tableName: book
+            columns:
+              - column: {name: title, value: "Mort"}
+              - column: {name: published_year, valueNumeric: 1987}
+              - column: {name: author_id, valueNumeric: 2}
+      rollback:
+        - delete:
+            tableName: book
+            where: author_id IN (1, 2)

@@ -1,0 +1,26 @@
+# Master changelog — the single entry point Spring points at.
+# It does nothing but (a) assert a global precondition and (b) include the
+# per-version changelogs IN ORDER. Keeping one file per logical change and
+# an ordered master is the standard Liquibase layout.
+databaseChangeLog:
+  # Global precondition: refuse to run against an unexpected database engine.
+  # onFail=HALT (the default) stops the whole update if this fails.
+  - preConditions:
+      - dbms:
+          type: h2, postgresql
+
+  - include:
+      file: changes/v1__create-author.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/v2__create-book.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/v3__add-author-email.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/v4__seed-data.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/v5__book-catalog-view.yaml
+      relativeToChangelogFile: true
