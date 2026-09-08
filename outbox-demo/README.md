@@ -76,6 +76,21 @@ Watch the logs: `[relay] published outbox id=...` followed by
 H2 console: http://localhost:8080/h2-console (`jdbc:h2:mem:testdb`, in-memory,
 resets on restart).
 
+## Testing
+
+```bash
+./mvnw test
+```
+
+Requires Docker running — both test classes use Testcontainers to spin up real
+Postgres + Kafka (no mocks/H2-only shortcuts), so context startup includes the
+same `KafkaAdmin` topic auto-creation and `OutboxRelay` scheduling as prod.
+
+| Class | Covers |
+|---|---|
+| `OutboxIntegrationTest` | End-to-end: register → outbox row → relay publishes → real `KafkaConsumer` reads it back off `user-events` |
+| `RegisterControllerRestAssuredTest` | HTTP-level `POST /register` contract via RestAssured: 201 happy path, 409 duplicate username, 400 invalid email |
+
 ## Stack
 
 Spring Boot 4.1 (WebMVC, Data JPA, Kafka, Validation) · H2 · Kafka 3.9 (KRaft) ·
