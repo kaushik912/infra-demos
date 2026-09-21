@@ -3,3 +3,8 @@ target/
 .idea/
 *.iml
 .DS_Store
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
