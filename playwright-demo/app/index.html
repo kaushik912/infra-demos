@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Todo Demo</title>
+</head>
+<body>
+  <h1>Todo Demo</h1>
+  <form id="form">
+    <label for="new-todo">New todo</label>
+    <input id="new-todo" type="text">
+    <button type="submit">Add</button>
+  </form>
+  <ul id="list"></ul>
+  <p id="count">0 items left</p>
+
+  <script>
+    const list = document.getElementById('list');
+    const count = document.getElementById('count');
+
+    function refresh() {
+      const left = list.querySelectorAll('input:not(:checked)').length;
+      count.textContent = left + ' items left';
+    }
+
+    document.getElementById('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('new-todo');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const li = document.createElement('li');
+      const box = document.createElement('input');
+      box.type = 'checkbox';
+      box.id = 'todo-' + list.children.length;
+      box.addEventListener('change', refresh);
+      const label = document.createElement('label');
+      label.htmlFor = box.id;
+      label.textContent = text; // textContent: no XSS
+      li.append(box, label);
+      list.append(li);
+
+      input.value = '';
+      refresh();
+    });
+  </script>
+</body>
+</html>
