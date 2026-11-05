@@ -7,8 +7,8 @@ output "ssh" {
 }
 
 output "ssh_tunnel" {
-  description = "Forward app HTTPS (8443) + HTTP (8080) to your laptop; then open https://localhost:8443"
-  value       = "ssh -L 8443:localhost:8443 -L 8080:localhost:8080 ec2-user@${aws_instance.demo.public_ip}"
+  description = "Forward app HTTPS (8443) to your laptop; then open https://localhost:8443. Only 8443: a local app on 8080 would make the tunnel warn, and the app is HTTPS-only anyway."
+  value       = "ssh -L 8443:localhost:8443 ec2-user@${aws_instance.demo.public_ip}"
 }
 
 output "rsync_project" {

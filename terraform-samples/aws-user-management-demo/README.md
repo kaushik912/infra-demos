@@ -46,8 +46,11 @@ docker compose logs -f app          # first build ~3-5 min
 ```bash
 $(terraform output -raw ssh_tunnel)   # keep open
 ```
-Open https://localhost:8443 (accept self-signed cert) -> register -> verify email
-link (points at `https://localhost:8443`, works while tunnel is open) -> login with MFA.
+Open https://localhost:8443 (accept self-signed cert) -> register -> click the verify
+email link (points at `https://localhost:8443`, works while tunnel is open) -> sign in
+either with email + password, or "Email me a login link" (magic link, valid 5 min,
+single use). No authenticator app or QR code needed. If the email is slow, the link is
+also in `docker compose logs app` (demo only).
 
 ## Teardown
 
