@@ -1,0 +1,22 @@
+{
+  "name": "policy-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "database.hostname": "db",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "postgres",
+    "database.dbname": "debezium",
+    "topic.prefix": "cdc",
+    "table.include.list": "public.policy",
+    "slot.name": "policy_slot",
+    "publication.name": "policy_pub",
+    "publication.autocreate.mode": "filtered",
+    "tombstones.on.delete": "false",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
+  }
+}
