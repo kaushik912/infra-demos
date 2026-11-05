@@ -60,6 +60,21 @@ curl -X DELETE http://localhost:8083/connectors/policy-connector   # also drop t
 docker compose down -v
 ```
 
+## Deploy to AWS (single EC2)
+
+Terraform in `../terraform-samples/aws-debezium-cdc-demo/` provisions one EC2 (Docker + Java 17, SSH-only SG, optional budget alert). Then rsync this project to the box and run the same steps as "Run" above. Full steps + teardown: that folder's `README.md`.
+
+```bash
+cd ../terraform-samples/aws-debezium-cdc-demo
+cp terraform.tfvars.example terraform.tfvars   # set my_ip_cidr
+terraform init && terraform apply
+terraform destroy                               # when done
+```
+
+Account only allows free-tier-eligible instance types (default `m7i-flex.large`, 8 GB). Don't open 5433/9092/8083 publicly.
+
+More background: `cdc-gotchas-simplified.md`.
+
 ## Event shape (schemas disabled)
 
 `{"before":{...}|null, "after":{...}|null, "source":{...,"lsn":...}, "op":"c|u|d|r", "ts_ms":...}`
