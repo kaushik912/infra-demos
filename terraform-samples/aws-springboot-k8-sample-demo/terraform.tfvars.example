@@ -1,3 +1,0 @@
-# cp terraform.tfvars.example terraform.tfvars  (gitignored), then edit.
-my_ip_cidr   = "203.0.113.7/32" # curl -s ifconfig.me -> add /32 (check the last digit!)
-budget_email = ""               # set to get an 80% spend alert
